@@ -38,7 +38,7 @@ const MainNavbar = () => {
         >
           Home
         </Button>
-        <Button
+        {/* <Button
           color="inherit"
           component={Link}
           to="/profile"
@@ -53,7 +53,7 @@ const MainNavbar = () => {
           }}
         >
           Profile
-        </Button>
+        </Button> */}
         <Button
           color="inherit"
           sx={{
@@ -63,7 +63,8 @@ const MainNavbar = () => {
               backgroundColor: '#E06A89'
             },
             mt: 3,
-            mb: 2
+            mb: 2,
+            ml: 2
           }}
           onClick={handleLogout}
         >

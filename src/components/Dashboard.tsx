@@ -33,7 +33,7 @@ const Dashboard: React.FC<DashboardProps> = ({ scores }) => {
           Challenge your knowledge, explore new topics, and master the subjects with our interactive assessment.
         </Typography>
         <Typography paragraph>
-          This assessment is designed to test your knowledge on the key concepts from the first three weeks of our course. It includes a variety of question types to evaluate your understanding and application of these topics.
+        This assessment is designed to test your knowledge of React. It includes a variety of question types to evaluate your understanding and application of React concepts.
         </Typography>
         <Button variant="contained" onClick={startAssessment} sx={{ marginBottom: 2, alignItems: 'center' }}>Start Assessment</Button>
         <ScoresTable recentScores={scores} />
