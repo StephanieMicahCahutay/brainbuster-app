@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, Typography, Button } from '@mui/material';
+import { AppBar, Toolbar, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import logo from '../assets/images/BB-image.png';
 import text from '../assets/images/BB-text.png'; 
