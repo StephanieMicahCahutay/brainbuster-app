@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import QuizComponent from './QuizComponent';
 import { fetchQuestions } from '../services/quizService';
 import { Question } from '../types';
