@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Box, Button, FormControl, FormControlLabel,
-  FormLabel, Radio, RadioGroup, Typography, Stack, CssBaseline
+  Box, Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Typography, Stack, CssBaseline, Card, CardContent, CardActions
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { QuizComponentProps } from '../types';
@@ -27,7 +26,7 @@ const QuizComponent = ({ questions, onQuizComplete }: QuizComponentProps) => {
   const handleNext = () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
-      setSelectedOption(''); 
+      setSelectedOption('');
     } else {
       const incorrectAnswers = questions.length - score;
       onQuizComplete(score, questions.length, score, incorrectAnswers);
@@ -49,22 +48,28 @@ const QuizComponent = ({ questions, onQuizComplete }: QuizComponentProps) => {
   ];
 
   return (
-    <Box sx={{ p: 3, maxWidth: 500, mx: 'auto' }}>
+    <Box sx={{ p: 3, maxWidth: 700, mx: 'auto' }}>
       <CssBaseline />
-      <Typography variant="h6">{`Question ${currentQuestion + 1}: ${question.question_text}`}</Typography>
-      <FormControl component="fieldset" fullWidth>
-        <FormLabel component="legend">Options</FormLabel>
-        <RadioGroup name="quiz-options" value={selectedOption} onChange={handleOptionChange}>
-          {options.map((option, index) => (
-            <FormControlLabel key={index} value={option.value} control={<Radio />} label={option.optionText} />
-          ))}
-        </RadioGroup>
-      </FormControl>
-      <Stack direction="row" spacing={2} justifyContent="center" mt={2}>
-        <Button variant="contained" onClick={handleNext}>
-          {currentQuestion === questions.length - 1 ? 'Submit' : 'Next'}
-        </Button>
-      </Stack>
+      <Card sx={{ backgroundColor: '#FE819F' }}>
+        <CardContent>
+          <Typography variant="h5" gutterBottom>{`Question ${currentQuestion + 1}: ${question.question_text}`}</Typography>
+          <FormControl component="fieldset" fullWidth>
+            <FormLabel component="legend">Options</FormLabel>
+            <RadioGroup name="quiz-options" value={selectedOption} onChange={handleOptionChange}>
+              {options.map((option, index) => (
+                <FormControlLabel key={index} value={option.value} control={<Radio />} label={option.optionText} />
+              ))}
+            </RadioGroup>
+          </FormControl>
+        </CardContent>
+        <CardActions>
+          <Stack direction="row" spacing={2} justifyContent="center" sx={{ width: '100%' }}>
+            <Button variant="contained" onClick={handleNext} sx={{ mt: 2, backgroundColor: '#52B0FF', color: '#fff', mb: 2 }}>
+              {currentQuestion === questions.length - 1 ? 'Submit' : 'Next'}
+            </Button>
+          </Stack>
+        </CardActions>
+      </Card>
     </Box>
   );
 };
