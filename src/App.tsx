@@ -8,11 +8,6 @@ import useStore from './store/useStore';
 import PrivateRoute from './components/PrivateRoute';
 import { Score } from './types';
 
-interface PrivateRouteProps {
-  path: string;
-  element: JSX.Element;
-}
-
 const App = () => {
   const scores: Score[] = useStore((state) => state.scores);
 
@@ -22,8 +17,21 @@ const App = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/signup" element={<SignupForm />} />
-        <Route path="/dashboard" element={<PrivateRoute path="/dashboard" element={<Dashboard scores={scores} />} />} />
-        <Route path="/assessment" element={<PrivateRoute path="/assessment" element={<AssessmentPage />} />} />
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute
+              path="/dashboard"
+              element={<Dashboard scores={scores} />}
+            />
+          }
+        />
+        <Route
+          path="/assessment"
+          element={
+            <PrivateRoute path="/assessment" element={<AssessmentPage />} />
+          }
+        />
       </Routes>
     </Router>
   );

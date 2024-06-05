@@ -1,16 +1,20 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Route, Navigate } from 'react-router-dom';
 import useStore from '../store/useStore';
 
 interface PrivateRouteProps {
-    element: JSX.Element;
-    path: string;
+  path: string;
+  element: JSX.Element;
 }
 
-const PrivateRoute: React.FC<PrivateRouteProps> = ({ element }) => {
-    const user = useStore((state) => state.user);
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ element, path }) => {
+  const user = useStore((state) => state.user);
 
-    return user ? element : <Navigate to="/login" />;
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+
+  return <Route path={path} element={element} />;
 };
 
 export default PrivateRoute;
