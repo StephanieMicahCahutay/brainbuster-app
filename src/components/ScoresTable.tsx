@@ -1,6 +1,5 @@
-import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import { Score } from './Dashboard';
+import { Score } from '../types';
 
 interface ScoresTableProps {
   recentScores: Score[];

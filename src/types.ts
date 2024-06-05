@@ -15,7 +15,16 @@ export interface Question {
 
 export interface QuizComponentProps {
     questions: Question[];
+    currentQuestion: number;
+    setCurrentQuestion: (currentQuestion: number) => void;
     onQuizComplete: (score: number, totalPoints: number, correctAnswers: number, incorrectAnswers: number) => void;
 }
 
-
+export interface Score {
+    score: number;
+    totalPoints: number;
+    correctAnswers: number;
+    incorrectAnswers: number;
+    date: string;
+    userId: string;
+}

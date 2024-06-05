@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  Box, Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Typography, Stack, CssBaseline, Card, CardContent, CardActions
+  Box, Button, FormControl, FormControlLabel,
+  FormLabel, Radio, RadioGroup, Typography, Stack, CssBaseline, Card, CardContent
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 import { QuizComponentProps } from '../types';
 
-const QuizComponent = ({ questions, onQuizComplete }: QuizComponentProps) => {
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [selectedOption, setSelectedOption] = useState('');
-  const [score, setScore] = useState(0);
-  const navigate = useNavigate();
+const QuizComponent: React.FC<QuizComponentProps> = ({
+  questions,
+  currentQuestion,
+  setCurrentQuestion,
+  onQuizComplete
+}) => {
+  const [selectedOption, setSelectedOption] = React.useState<string>('');
+  const [score, setScore] = React.useState<number>(0);
 
   const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selected = event.target.value;
@@ -30,8 +33,6 @@ const QuizComponent = ({ questions, onQuizComplete }: QuizComponentProps) => {
     } else {
       const incorrectAnswers = questions.length - score;
       onQuizComplete(score, questions.length, score, incorrectAnswers);
-      alert(`You have completed the quiz! Your score: ${score}/${questions.length}`);
-      navigate('/dashboard');
     }
   };
 
@@ -48,11 +49,11 @@ const QuizComponent = ({ questions, onQuizComplete }: QuizComponentProps) => {
   ];
 
   return (
-    <Box sx={{ p: 3, maxWidth: 700, mx: 'auto' }}>
+    <Box sx={{ p: 3, maxWidth: 500, mx: 'auto' }}>
       <CssBaseline />
       <Card sx={{ backgroundColor: '#FE819F' }}>
         <CardContent>
-          <Typography variant="h5" gutterBottom>{`Question ${currentQuestion + 1}: ${question.question_text}`}</Typography>
+          <Typography variant="h6" gutterBottom>{`Question ${currentQuestion + 1}: ${question.question_text}`}</Typography>
           <FormControl component="fieldset" fullWidth>
             <FormLabel component="legend">Options</FormLabel>
             <RadioGroup name="quiz-options" value={selectedOption} onChange={handleOptionChange}>
@@ -61,14 +62,12 @@ const QuizComponent = ({ questions, onQuizComplete }: QuizComponentProps) => {
               ))}
             </RadioGroup>
           </FormControl>
-        </CardContent>
-        <CardActions>
-          <Stack direction="row" spacing={2} justifyContent="center" sx={{ width: '100%' }}>
-            <Button variant="contained" onClick={handleNext} sx={{ mt: 2, backgroundColor: '#52B0FF', color: '#fff', mb: 2 }}>
+          <Stack direction="row" spacing={2} justifyContent="center" mt={2}>
+            <Button variant="contained" onClick={handleNext} sx={{ backgroundColor: '#52B0FF', mb: 2 }}>
               {currentQuestion === questions.length - 1 ? 'Submit' : 'Next'}
             </Button>
           </Stack>
-        </CardActions>
+        </CardContent>
       </Card>
     </Box>
   );

@@ -19,7 +19,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.23.1",
     "rimraf": "^5.0.7",
-    "zustand": "^4.5.2"
+    "zustand": "https://pkg.csb.dev/pmndrs/zustand/commit/bf044d7e/zustand"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",

@@ -2,30 +2,36 @@ import React, { useState } from 'react';
 import { Button, TextField, Box, Typography, Container, CssBaseline } from '@mui/material';
 import supabase from '../supabaseClient';
 import { useNavigate } from 'react-router-dom';
+import useStore from '../store/useStore';
 
 const LoginForm = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const setUser = useStore((state) => state.setUser);
     const navigate = useNavigate();
 
     const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-    });
+        e.preventDefault();
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+        });
 
-    if (error) {
-        console.error('Login error:', error);
-        alert(error.message);
-    } else if (data) {
-        console.log('Login successful:', data);
-        navigate('/dashboard');
-    } else {
-        console.log('No error and no user - unusual case');
-    }
-};
-
+        if (error) {
+            console.error('Login error:', error);
+            alert(error.message);
+        } else if (data) {
+            console.log('Login successful:', data);
+            if (data.user) {
+                setUser({ id: data.user.id, email: data.user.email || '' });
+                navigate('/dashboard');
+            } else {
+                console.log('No user data - unusual case');
+            }
+        } else {
+            console.log('No error and no user - unusual case');
+        }
+    };
 
     return (
         <Container component="main" maxWidth="xs">
@@ -37,7 +43,7 @@ const LoginForm = () => {
                     flexDirection: 'column',
                     alignItems: 'center',
                     padding: 3,
-                    backgroundColor: '#021E45', 
+                    backgroundColor: '#021E45',
                     borderRadius: 2,
                     boxShadow: '0 3px 5px 2px rgba(0, 0, 0, 0.3)'
                 }}
@@ -58,11 +64,11 @@ const LoginForm = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     sx={{
                         input: { color: '#ffffff' },
-                        label: { color: '#ffffff' }, 
+                        label: { color: '#ffffff' },
                         '& label.Mui-focused': { color: '#ffffff' },
                         '& .MuiOutlinedInput-root': {
-                            '& fieldset': { borderColor: '#ffffff' }, 
-                            '&:hover fieldset': { borderColor: '#ffffff' }, 
+                            '& fieldset': { borderColor: '#ffffff' },
+                            '&:hover fieldset': { borderColor: '#ffffff' },
                             '&.Mui-focused fieldset': { borderColor: '#ffffff' },
                         }
                     }}
@@ -95,8 +101,8 @@ const LoginForm = () => {
                     variant="contained"
                     sx={{
                         mt: 3, mb: 2,
-                        backgroundColor: '#FE819F', 
-                        '&:hover': { backgroundColor: '#E06A89' } 
+                        backgroundColor: '#FE819F',
+                        '&:hover': { backgroundColor: '#E06A89' }
                     }}
                     onClick={handleLogin}
                 >
