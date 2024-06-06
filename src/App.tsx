@@ -4,13 +4,9 @@ import LoginForm from './components/LoginForm';
 import SignupForm from './components/SignupForm';
 import Dashboard from './components/Dashboard';
 import AssessmentPage from './components/AssessmentPage';
-import useStore from './store/useStore';
 import PrivateRoute from './components/PrivateRoute';
-import { Score } from './types';
 
 const App = () => {
-  const scores: Score[] = useStore((state) => state.scores);
-
   return (
     <Router>
       <Routes>
