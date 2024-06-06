@@ -1,18 +1,22 @@
-import React, { useState } from 'react';
 import { Button, TextField, Box, Typography, Container, CssBaseline } from '@mui/material';
 import supabase from '../supabaseClient';
 import { useNavigate } from 'react-router-dom';
 import useStore from '../store/useStore';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { loginSchema, LoginSchema } from '../schemas';
 
 const LoginForm = () => {
-    const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
     const setUser = useStore((state) => state.setUser);
     const navigate = useNavigate();
 
-    const handleLogin = async (e: React.FormEvent) => {
-        e.preventDefault();
-        const { data, error } = await supabase.auth.signInWithPassword({
+    const { register, handleSubmit, formState: { errors } } = useForm<LoginSchema>({
+        resolver: zodResolver(loginSchema),
+    });
+
+    const handleLogin = async (data: LoginSchema) => {
+        const { email, password } = data;
+        const { data: loginData, error } = await supabase.auth.signInWithPassword({
             email,
             password,
         });
@@ -20,10 +24,10 @@ const LoginForm = () => {
         if (error) {
             console.error('Login error:', error);
             alert(error.message);
-        } else if (data) {
-            console.log('Login successful:', data);
-            if (data.user) {
-                setUser({ id: data.user.id, email: data.user.email || '' });
+        } else if (loginData) {
+            console.log('Login successful:', loginData);
+            if (loginData.user) {
+                setUser({ id: loginData.user.id, email: loginData.user.email || '' });
                 navigate('/dashboard');
             } else {
                 console.log('No user data - unusual case');
@@ -51,63 +55,64 @@ const LoginForm = () => {
                 <Typography component="h1" variant="h5" sx={{ color: '#ffffff', mb: 3 }}>
                     Welcome to Brain Buster
                 </Typography>
-                <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    autoComplete="email"
-                    autoFocus
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    sx={{
-                        input: { color: '#ffffff' },
-                        label: { color: '#ffffff' },
-                        '& label.Mui-focused': { color: '#ffffff' },
-                        '& .MuiOutlinedInput-root': {
-                            '& fieldset': { borderColor: '#ffffff' },
-                            '&:hover fieldset': { borderColor: '#ffffff' },
-                            '&.Mui-focused fieldset': { borderColor: '#ffffff' },
-                        }
-                    }}
-                />
-                <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    sx={{
-                        input: { color: '#ffffff' },
-                        label: { color: '#ffffff' },
-                        '& label.Mui-focused': { color: '#ffffff' },
-                        '& .MuiOutlinedInput-root': {
-                            '& fieldset': { borderColor: '#ffffff' },
-                            '&:hover fieldset': { borderColor: '#ffffff' },
-                            '&.Mui-focused fieldset': { borderColor: '#ffffff' },
-                        }
-                    }}
-                />
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{
-                        mt: 3, mb: 2,
-                        backgroundColor: '#FE819F',
-                        '&:hover': { backgroundColor: '#E06A89' }
-                    }}
-                    onClick={handleLogin}
-                >
-                    Login
-                </Button>
+                <form onSubmit={handleSubmit(handleLogin)}>
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
+                        label="Email Address"
+                        autoComplete="email"
+                        autoFocus
+                        {...register('email')}
+                        error={!!errors.email}
+                        helperText={errors.email?.message}
+                        sx={{
+                            input: { color: '#ffffff' },
+                            label: { color: '#ffffff' },
+                            '& label.Mui-focused': { color: '#ffffff' },
+                            '& .MuiOutlinedInput-root': {
+                                '& fieldset': { borderColor: '#ffffff' },
+                                '&:hover fieldset': { borderColor: '#ffffff' },
+                                '&.Mui-focused fieldset': { borderColor: '#ffffff' },
+                            }
+                        }}
+                    />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="password"
+                        label="Password"
+                        type="password"
+                        autoComplete="current-password"
+                        {...register('password')}
+                        error={!!errors.password}
+                        helperText={errors.password?.message}
+                        sx={{
+                            input: { color: '#ffffff' },
+                            label: { color: '#ffffff' },
+                            '& label.Mui-focused': { color: '#ffffff' },
+                            '& .MuiOutlinedInput-root': {
+                                '& fieldset': { borderColor: '#ffffff' },
+                                '&:hover fieldset': { borderColor: '#ffffff' },
+                                '&.Mui-focused fieldset': { borderColor: '#ffffff' },
+                            }
+                        }}
+                    />
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        sx={{
+                            mt: 3, mb: 2,
+                            backgroundColor: '#FE819F',
+                            '&:hover': { backgroundColor: '#E06A89' }
+                        }}
+                    >
+                        Login
+                    </Button>
+                </form>
             </Box>
         </Container>
     );
