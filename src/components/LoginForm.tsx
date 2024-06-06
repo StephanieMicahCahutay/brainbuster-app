@@ -5,6 +5,7 @@ import useStore from '../store/useStore';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, LoginSchema } from '../schemas';
+import { Link } from 'react-router-dom';
 
 const LoginForm = () => {
     const setUser = useStore((state) => state.setUser);
@@ -112,6 +113,9 @@ const LoginForm = () => {
                     >
                         Login
                     </Button>
+                    <Typography variant="body2" sx={{ color: '#ffffff', mt: 2 }}>
+                        Don't have an account? <Link to="/signup" style={{ color: '#52B0FF' }}>Sign Up</Link>
+                    </Typography>
                 </form>
             </Box>
         </Container>
