@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import {
   Button,
   TextField,
@@ -9,29 +8,29 @@ import {
 } from '@mui/material';
 import supabase from '../supabaseClient';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { signupSchema, SignupSchema } from '../schemas';
 
 const SignupForm = () => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [confirmPassword, setConfirmPassword] = useState<string>('');
   const navigate = useNavigate();
 
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      alert('Passwords do not match!');
-      return;
-    }
-    const { data, error } = await supabase.auth.signUp({
-      email: email,
-      password: password,
+  const { register, handleSubmit, formState: { errors } } = useForm<SignupSchema>({
+    resolver: zodResolver(signupSchema),
+  });
+
+  const handleSignup = async (data: SignupSchema) => {
+    const { email, password } = data;
+    const { data: signUpData, error } = await supabase.auth.signUp({
+      email,
+      password,
     });
 
-    console.log('Signup attempt:', data, error);
+    console.log('Signup attempt:', signUpData, error);
 
     if (error) {
       alert(error.message);
-    } else if (data) {
+    } else if (signUpData) {
       navigate('/dashboard');
     }
   };
@@ -55,86 +54,87 @@ const SignupForm = () => {
         <Typography component="h1" variant="h5" sx={{ mb: 3 }}>
           Sign Up to Brain Buster
         </Typography>
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          id="email"
-          label="Email"
-          name="email"
-          autoComplete="email"
-          autoFocus
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          sx={{
-            input: { color: '#ffffff' },
-            label: { color: '#ffffff' },
-            '& label.Mui-focused': { color: '#ffffff' },
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': { borderColor: '#ffffff' },
-              '&:hover fieldset': { borderColor: '#ffffff' },
-              '&.Mui-focused fieldset': { borderColor: '#ffffff' },
-            },
-          }}
-        />
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          name="password"
-          label="Password"
-          type="password"
-          id="password"
-          autoComplete="new-password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          sx={{
-            input: { color: '#ffffff' },
-            label: { color: '#ffffff' },
-            '& label.Mui-focused': { color: '#ffffff' },
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': { borderColor: '#ffffff' },
-              '&:hover fieldset': { borderColor: '#ffffff' },
-              '&.Mui-focused fieldset': { borderColor: '#ffffff' },
-            },
-          }}
-        />
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          name="confirmPassword"
-          label="Confirm Password"
-          type="password"
-          id="confirmPassword"
-          autoComplete="new-password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          sx={{
-            input: { color: '#ffffff' },
-            label: { color: '#ffffff' },
-            '& label.Mui-focused': { color: '#ffffff' },
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': { borderColor: '#ffffff' },
-              '&:hover fieldset': { borderColor: '#ffffff' },
-              '&.Mui-focused fieldset': { borderColor: '#ffffff' },
-            },
-          }}
-        />
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{
-            mt: 3,
-            mb: 2,
-            backgroundColor: '#FE819F',
-            '&:hover': { backgroundColor: '#E06A89' },
-          }}
-          onClick={handleSignup}
-        >
-          Sign Up
-        </Button>
+        <form onSubmit={handleSubmit(handleSignup)}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email"
+            autoComplete="email"
+            autoFocus
+            {...register('email')}
+            error={!!errors.email}
+            helperText={errors.email?.message}
+            sx={{
+              input: { color: '#ffffff' },
+              label: { color: '#ffffff' },
+              '& label.Mui-focused': { color: '#ffffff' },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': { borderColor: '#ffffff' },
+                '&:hover fieldset': { borderColor: '#ffffff' },
+                '&.Mui-focused fieldset': { borderColor: '#ffffff' },
+              },
+            }}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="password"
+            label="Password"
+            type="password"
+            autoComplete="new-password"
+            {...register('password')}
+            error={!!errors.password}
+            helperText={errors.password?.message}
+            sx={{
+              input: { color: '#ffffff' },
+              label: { color: '#ffffff' },
+              '& label.Mui-focused': { color: '#ffffff' },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': { borderColor: '#ffffff' },
+                '&:hover fieldset': { borderColor: '#ffffff' },
+                '&.Mui-focused fieldset': { borderColor: '#ffffff' },
+              },
+            }}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="confirmPassword"
+            label="Confirm Password"
+            type="password"
+            autoComplete="new-password"
+            {...register('confirmPassword')}
+            error={!!errors.confirmPassword}
+            helperText={errors.confirmPassword?.message}
+            sx={{
+              input: { color: '#ffffff' },
+              label: { color: '#ffffff' },
+              '& label.Mui-focused': { color: '#ffffff' },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': { borderColor: '#ffffff' },
+                '&:hover fieldset': { borderColor: '#ffffff' },
+                '&.Mui-focused fieldset': { borderColor: '#ffffff' },
+              },
+            }}
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{
+              mt: 3,
+              mb: 2,
+              backgroundColor: '#FE819F',
+              '&:hover': { backgroundColor: '#E06A89' },
+            }}
+          >
+            Sign Up
+          </Button>
+        </form>
       </Box>
     </Container>
   );
