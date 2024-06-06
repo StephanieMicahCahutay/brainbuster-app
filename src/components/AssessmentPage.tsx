@@ -25,12 +25,7 @@ const AssessmentPage = () => {
     loadQuestions();
   }, [setQuestions, setCurrentQuestion]);
 
-  const handleQuizCompletion = (
-    score: number,
-    totalPoints: number,
-    correctAnswers: number,
-    incorrectAnswers: number,
-  ) => {
+  const handleQuizCompletion = (score: number, totalPoints: number, correctAnswers: number, incorrectAnswers: number) => {
     const userId = useStore.getState().user?.id || ''; // Assuming you have the user ID stored in Zustand
     const newScore = {
       score,

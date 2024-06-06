@@ -1,12 +1,4 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-} from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { Score } from '../types';
 
 interface ScoresTableProps {
@@ -29,9 +21,7 @@ const ScoresTable: React.FC<ScoresTableProps> = ({ recentScores }) => {
         <TableBody>
           {recentScores.map((row, index) => (
             <TableRow key={index}>
-              <TableCell component="th" scope="row">
-                {row.score}
-              </TableCell>
+              <TableCell component="th" scope="row">{row.score}</TableCell>
               <TableCell align="right">{row.totalPoints}</TableCell>
               <TableCell align="right">{row.correctAnswers}</TableCell>
               <TableCell align="right">{row.incorrectAnswers}</TableCell>

@@ -17,21 +17,8 @@ const App = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/signup" element={<SignupForm />} />
-        <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute
-              path="/dashboard"
-              element={<Dashboard scores={scores} />}
-            />
-          }
-        />
-        <Route
-          path="/assessment"
-          element={
-            <PrivateRoute path="/assessment" element={<AssessmentPage />} />
-          }
-        />
+        <Route path="/dashboard" element={<PrivateRoute element={<Dashboard />} />} />
+        <Route path="/assessment" element={<PrivateRoute element={<AssessmentPage />} />} />
       </Routes>
     </Router>
   );

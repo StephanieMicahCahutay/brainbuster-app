@@ -1,6 +1,6 @@
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Score } from '../types';
+import { Score } from '../types'; 
 
 interface State {
   scores: Score[];
@@ -27,9 +27,9 @@ const useStore = create<State>()(
       setCurrentQuestion: (currentQuestion) => set({ currentQuestion }),
     }),
     {
-      name: 'brain-buster-storage', // name of the item in the storage (must be unique)
-    },
-  ),
+      name: 'brain-buster-storage', 
+    }
+  )
 );
 
 export default useStore;
